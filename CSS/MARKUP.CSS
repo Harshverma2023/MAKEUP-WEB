@@ -300,6 +300,15 @@ body {
   transform: scale(1.05);
 }
 
+.logo-img {
+  height: 40px;
+  width: 40px;
+  object-fit: contain;
+  border-radius: 50%;
+  border: 2px solid var(--primary-color);
+  background: white;
+}
+
 .logo i {
   font-size: 1.8rem;
 }

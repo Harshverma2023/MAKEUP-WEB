@@ -28,9 +28,9 @@ class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         super().end_headers()
     
     def do_GET(self):
-        # Redirect root to HTML/INDEX.HTML
+        # Redirect root to INDEX.HTML
         if self.path == '/' or self.path == '':
-            self.path = '/HTML/INDEX.HTML'
+            self.path = '/INDEX.HTML'
         return super().do_GET()
 
 Handler = MyHTTPRequestHandler

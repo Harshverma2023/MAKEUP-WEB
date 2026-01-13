@@ -45,7 +45,7 @@ def write_json_file(filename, data):
 @app.route('/')
 def index():
     """Serve the main HTML file"""
-    return send_from_directory(os.path.join(PARENT_DIR, 'HTML'), 'INDEX.HTML')
+    return send_from_directory(PARENT_DIR, 'INDEX.HTML')
 
 
 @app.route('/<path:path>')
