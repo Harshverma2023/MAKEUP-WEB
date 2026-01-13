@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Professional makeup artist services - Bridal, Party, HD makeup and more">
+    <title>Bhawna Sagar Makeover | Professional Makeup Artist</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Link to external CSS -->
+    <link rel="stylesheet" href="../CSS/MARKUP.CSS">
+
+    <!-- Link to external CSS -->
+    <link rel="stylesheet" href="../CSS/MARKUP.CSS">
+</head>
+
+<body>
+    <!-- Auth Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-content auth-card">
+            <span class="close-modal" onclick="closeAuthModal()">&times;</span>
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="switchAuthTab('login')">Login</button>
+                <button class="auth-tab" onclick="switchAuthTab('signup')">Sign Up</button>
+            </div>
+
+            <!-- Login Form -->
+            <div id="loginFormSection" class="auth-section">
+                <h3>Welcome Back</h3>
+                <form id="loginForm">
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="loginEmail" placeholder="Email Address" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="loginPassword" placeholder="Password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary auth-btn">Login</button>
+                    <p class="auth-toggle">Login with <a href="#" onclick="showSectionAuth('phone')">Phone OTP</a></p>
+                </form>
+            </div>
+
+            <!-- Signup Form -->
+            <div id="signupFormSection" class="auth-section" style="display: none;">
+                <h3>Create Account</h3>
+                <form id="signupForm">
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="signupName" placeholder="Full Name" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="signupEmail" placeholder="Email Address" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="signupPassword" placeholder="Password (Min 6 chars)" required
+                            minlength="6">
+                    </div>
+                    <button type="submit" class="btn btn-primary auth-btn">Register</button>
+                    <p class="auth-toggle">Already have an account? <a href="#"
+                            onclick="switchAuthTab('login')">Login</a></p>
+                </form>
+            </div>
+
+            <!-- Phone OTP Verification -->
+            <div id="phoneAuthSection" class="auth-section" style="display: none;">
+                <h3>Phone Verification</h3>
+                <div id="phoneInputStep">
+                    <div class="input-group">
+                        <i class="fas fa-phone"></i>
+                        <input type="tel" id="phoneNumber" placeholder="+91 0000000000" required>
+                    </div>
+                    <div id="recaptcha-container"></div>
+                    <button type="button" onclick="sendOTP()" class="btn btn-primary auth-btn">Send OTP</button>
+                </div>
+                <div id="otpInputStep" style="display: none;">
+                    <p>Enter the 6-digit code sent to your phone</p>
+                    <div class="otp-inputs">
+                        <input type="text" maxlength="6" id="verificationCode" placeholder="000000">
+                    </div>
+                    <button type="button" onclick="verifyOTP()" class="btn btn-primary auth-btn">Verify & Login</button>
+                    <p class="auth-toggle"><a href="#" onclick="showSectionAuth('login')">Back to Login</a></p>
+                </div>
+            </div>
+
+            <!-- Success/Message Overlay -->
+            <div id="authStatus" class="auth-status-msg" style="display: none;"></div>
+        </div>
+    </div>
+    <!-- Navigation -->
+    <nav id="navbar" class="navbar">
+        <div class="container">
+            <div class="logo" onclick="showSection('home')">
+                <i class="fas fa-gem"></i>
+                <span>BHAWNA SAGAR</span>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#" onclick="showSection('home')" class="nav-link active" data-section="home">Home</a></li>
+                <li><a href="#" onclick="showSection('about')" class="nav-link" data-section="about">About</a></li>
+                <li><a href="#" onclick="showSection('services')" class="nav-link" data-section="services">Services</a>
+                </li>
+                <li><a href="#" onclick="showSection('gallery')" class="nav-link" data-section="gallery">Gallery</a>
+                </li>
+                <li><a href="#" onclick="showSection('testimonials')" class="nav-link"
+                        data-section="testimonials">Reviews</a></li>
+                <li><a href="#" onclick="showSection('booking')" class="nav-link" data-section="booking">Booking</a>
+                </li>
+                <li id="authNav">
+                    <button class="btn btn-outline" onclick="openAuthModal()" id="loginBtnNav">Login</button>
+                    <div id="userProfileNav" style="display: none;" class="user-profile-nav">
+                        <span id="userNameNav"></span>
+                        <button class="btn-logout" onclick="userLogout()"><i class="fas fa-sign-out-alt"></i></button>
+                    </div>
+                </li>
+            </ul>
+            <div class="mobile-menu" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Seasonal Offers Banner -->
+    <div class="offers-banner" id="offersBanner">
+        <div class="offers-container">
+            <div class="offer-slide active">
+                <i class="fas fa-percentage"></i>
+                <span><strong>20% OFF</strong> on Party Makeup - January Special! 🎉</span>
+                <a href="#" onclick="showSection('booking')" class="offer-btn">Book Now</a>
+            </div>
+            <div class="offer-slide">
+                <i class="fas fa-gift"></i>
+                <span>Book Bridal Package & Get <strong>FREE Trial</strong> Worth ₹3,000! 💍</span>
+                <a href="#" onclick="showSection('booking')" class="offer-btn">Claim Offer</a>
+            </div>
+            <div class="offer-slide">
+                <i class="fas fa-sparkles"></i>
+                <span><strong>Festive Season Special:</strong> HD Makeup at ₹7,999 Only! ✨</span>
+                <a href="#" onclick="showSection('booking')" class="offer-btn">Get Deal</a>
+            </div>
+            <div class="offer-slide">
+                <i class="fas fa-heart"></i>
+                <span><strong>Valentine's Special:</strong> Couple Makeup Package 30% OFF! 💕</span>
+                <a href="#" onclick="showSection('booking')" class="offer-btn">Book Now</a>
+            </div>
+        </div>
+        <button class="banner-close" onclick="closeBanner()" aria-label="Close banner">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- Main Content Container -->
+    <div id="main-content">
+
+        <!-- Hero Section (Home) -->
+        <section class="page-section active" id="home" data-page="home">
+            <div class="hero">
+                <div class="hero-overlay"></div>
+                <div class="hero-content">
+                    <div class="hero-badge">
+                        <i class="fas fa-star"></i>
+                        <span>Premium Makeup Artist</span>
+                    </div>
+                    <h1 class="hero-title">
+                        <span class="golden-text">Enhancing Beauty,</span><br>
+                        <span class="gradient-text">Creating Confidence</span>
+                    </h1>
+                    <p class="hero-subtitle">Transform your special moments with professional makeup artistry that
+                        brings out your natural radiance</p>
+                    <div class="cta-buttons">
+                        <a href="#" onclick="showSection('services')" class="btn btn-primary">
+                            <span>Book Appointment</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                        <a href="#" onclick="showSection('services')" class="btn btn-secondary">
+                            <span>View Services</span>
+                            <i class="fas fa-sparkles"></i>
+                        </a>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <h3>500+</h3>
+                            <p>Happy Clients</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3>8+</h3>
+                            <p>Years Experience</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3>100%</h3>
+                            <p>Satisfaction</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="scroll-indicator" onclick="showSection('about')">
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="page-section section-container" id="about" data-page="about">
+            <div class="container">
+                <h2 class="section-title">About Me</h2>
+                <div class="about-content">
+                    <div class="about-text">
+                        <p>Hello! I'm Bhawna Sagar, a certified professional makeup artist with over 8 years of
+                            experience in transforming dreams into reality. My passion lies in enhancing natural beauty
+                            and creating looks that make every client feel confident and stunning.</p>
+                        <p>With specialized training in advanced makeup techniques and a keen eye for detail, I ensure
+                            every bride, party-goer, and photoshoot model looks absolutely flawless.</p>
+                        <div class="specialties">
+                            <span class="specialty-tag"><i class="fas fa-check"></i> Bridal Makeup</span>
+                            <span class="specialty-tag"><i class="fas fa-check"></i> Party Makeup</span>
+                            <span class="specialty-tag"><i class="fas fa-check"></i> HD Makeup</span>
+                            <span class="specialty-tag"><i class="fas fa-check"></i> Airbrush</span>
+                            <span class="specialty-tag"><i class="fas fa-check"></i> Editorial</span>
+                        </div>
+                        <div class="cta-buttons" style="margin-top: 2rem;">
+                            <a href="#" onclick="showSection('services')" class="btn btn-primary">
+                                <span>View Services</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="about-image">
+                        <div class="image-placeholder">
+                            <i class="fas fa-palette"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Achievement Stats -->
+                <div class="achievement-stats">
+                    <div class="achievement-item">
+                        <i class="fas fa-heart"></i>
+                        <h3>500+</h3>
+                        <p>Happy Brides</p>
+                    </div>
+                    <div class="achievement-item">
+                        <i class="fas fa-calendar-check"></i>
+                        <h3>8+</h3>
+                        <p>Years Experience</p>
+                    </div>
+                    <div class="achievement-item">
+                        <i class="fas fa-users"></i>
+                        <h3>1000+</h3>
+                        <p>Happy Clients</p>
+                    </div>
+                    <div class="achievement-item">
+                        <i class="fas fa-star"></i>
+                        <h3>100%</h3>
+                        <p>Satisfaction Rate</p>
+                    </div>
+                </div>
+
+                <!-- Certifications -->
+                <div class="certifications-section">
+                    <h3 class="sub-section-title"><i class="fas fa-certificate"></i> Certifications & Training</h3>
+                    <div class="certification-cards">
+                        <div class="cert-card">
+                            <i class="fas fa-graduation-cap"></i>
+                            <h4>Professional Makeup Artistry</h4>
+                            <p>Certified by VLCC Institute of Beauty & Nutrition</p>
+                        </div>
+                        <div class="cert-card">
+                            <i class="fas fa-spray-can"></i>
+                            <h4>Advanced Airbrush Techniques</h4>
+                            <p>Specialized training in HD & Airbrush Makeup</p>
+                        </div>
+                        <div class="cert-card">
+                            <i class="fas fa-ring"></i>
+                            <h4>Bridal Makeup Specialist</h4>
+                            <p>Expert certification in Indian & Western bridal looks</p>
+                        </div>
+                        <div class="cert-card">
+                            <i class="fas fa-paint-brush"></i>
+                            <h4>Hair Styling & Design</h4>
+                            <p>Professional hair styling for all occasions</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Awards & Recognition -->
+                <div class="awards-section">
+                    <h3 class="sub-section-title"><i class="fas fa-trophy"></i> Awards & Recognition</h3>
+                    <div class="awards-grid">
+                        <div class="award-card">
+                            <div class="award-icon">
+                                <i class="fas fa-award"></i>
+                            </div>
+                            <div class="award-content">
+                                <h4>Best Bridal Makeup Artist 2024</h4>
+                                <p>Wedding Sutra Awards - North India</p>
+                            </div>
+                        </div>
+                        <div class="award-card">
+                            <div class="award-icon">
+                                <i class="fas fa-medal"></i>
+                            </div>
+                            <div class="award-content">
+                                <h4>Top 10 Makeup Artists in Agra</h4>
+                                <p>Featured by WeddingWire India</p>
+                            </div>
+                        </div>
+                        <div class="award-card">
+                            <div class="award-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="award-content">
+                                <h4>Excellence in Beauty Services</h4>
+                                <p>Uttar Pradesh Beauty Awards 2023</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Featured In -->
+                <div class="featured-section">
+                    <h3 class="sub-section-title"><i class="fas fa-newspaper"></i> Featured In</h3>
+                    <div class="featured-logos">
+                        <div class="featured-item">
+                            <i class="fas fa-book-open"></i>
+                            <span>Vogue India</span>
+                        </div>
+                        <div class="featured-item">
+                            <i class="fas fa-ring"></i>
+                            <span>WeddingWire</span>
+                        </div>
+                        <div class="featured-item">
+                            <i class="fas fa-heart"></i>
+                            <span>Wedding Sutra</span>
+                        </div>
+                        <div class="featured-item">
+                            <i class="fas fa-camera"></i>
+                            <span>ShaadiSaga</span>
+                        </div>
+                        <div class="featured-item">
+                            <i class="fas fa-gem"></i>
+                            <span>WedMeGood</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Services Section -->
+        <section class="page-section section-container" id="services" data-page="services">
+            <div class="container">
+                <h2 class="section-title">Services & Pricing</h2>
+                <div class="service-cards">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-ring"></i>
+                        </div>
+                        <h3>Bridal Makeup</h3>
+                        <p>Complete bridal makeover with HD finish, hairstyling, and pre-wedding trial</p>
+                        <div class="price">₹25,000</div>
+                        <a href="#" onclick="showSection('booking')" class="btn btn-primary">
+                            <span>Book Now</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <div class="service-card featured">
+                        <div class="featured-badge">Popular</div>
+                        <div class="service-icon">
+                            <i class="fas fa-cocktail"></i>
+                        </div>
+                        <h3>Party Makeup</h3>
+                        <p>Glamorous party looks perfect for any celebration or evening event</p>
+                        <div class="price">₹3,000</div>
+                        <a href="#" onclick="showSection('booking')" class="btn btn-primary">
+                            <span>Book Now</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                        <h3>Photoshoot</h3>
+                        <p>Professional makeup for fashion, editorial, and portfolio shoots</p>
+                        <div class="price">₹12,000</div>
+                        <a href="#" onclick="showSection('booking')" class="btn btn-primary">
+                            <span>Book Now</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <h3>Engagement</h3>
+                        <p>Elegant and sophisticated looks for your special engagement ceremony</p>
+                        <div class="price">₹10,000</div>
+                        <a href="#" onclick="showSection('booking')" class="btn btn-primary">
+                            <span>Book Now</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <h3>HD Makeup</h3>
+                        <p>Professional HD makeup for films, photos, and events</p>
+                        <div class="price">₹10,000</div>
+                        <a href="#" onclick="showSection('booking')" class="btn btn-primary">
+                            <span>Book Now</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-spray-can"></i>
+                        </div>
+                        <h3>Airbrush Makeup</h3>
+                        <p>Long-lasting HD airbrush makeup for flawless finish</p>
+                        <div class="price">₹12,000</div>
+                        <a href="#" onclick="showSection('booking')" class="btn btn-primary">
+                            <span>Book Now</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h3>Custom Package</h3>
+                        <p>Personalized makeup services tailored to your specific needs</p>
+                        <div class="price">Contact</div>
+                        <a href="#" onclick="showSection('contact')" class="btn btn-secondary">
+                            <span>Inquire</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section class="page-section section-container" id="gallery" data-page="gallery">
+            <div class="container">
+                <h2 class="section-title">Portfolio</h2>
+                <div class="gallery-grid">
+                    <div class="gallery-item">
+                        <img src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=600&h=800&fit=crop"
+                            alt="Bridal Makeup">
+                        <div class="gallery-overlay">
+                            <span>Bridal</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://images.unsplash.com/photo-1487412912498-99e79113b712?w=600&h=800&fit=crop"
+                            alt="Party Makeup">
+                        <div class="gallery-overlay">
+                            <span>Party</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://images.unsplash.com/photo-1503342394128-c104d54dba01?w=600&h=800&fit=crop"
+                            alt="Editorial Makeup">
+                        <div class="gallery-overlay">
+                            <span>Editorial</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://images.unsplash.com/photo-1522337660859-02fbefca4702?w=600&h=800&fit=crop"
+                            alt="HD Makeup">
+                        <div class="gallery-overlay">
+                            <span>HD</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=600&h=800&fit=crop"
+                            alt="Glamour Makeup">
+                        <div class="gallery-overlay">
+                            <span>Glamour</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600&h=800&fit=crop"
+                            alt="Fashion Makeup">
+                        <div class="gallery-overlay">
+                            <span>Fashion</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="cta-buttons" style="margin-top: 3rem; justify-content: center;">
+                    <a href="#" onclick="showSection('contact')" class="btn btn-primary">
+                        <span>Book Your Session</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="page-section section-container" id="testimonials" data-page="testimonials">
+            <div class="container">
+                <h2 class="section-title">Client Reviews</h2>
+                <div class="testimonial-grid">
+                    <div class="testimonial">
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p>"Absolutely stunning! She made me feel like a princess on my wedding day. The makeup lasted
+                            through tears, dancing, and everything in between. Highly recommend!"</p>
+                        <div class="testimonial-author">
+                            <strong>Priya Sharma</strong>
+                            <span>Bride</span>
+                        </div>
+                    </div>
+                    <div class="testimonial">
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p>"Professional, talented, and so easy to work with! My engagement makeup was flawless and
+                            lasted all day. Thank you for making me look and feel beautiful!"</p>
+                        <div class="testimonial-author">
+                            <strong>Anjali Verma</strong>
+                            <span>Engagement</span>
+                        </div>
+                    </div>
+                    <div class="testimonial">
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p>"Best makeup artist in Delhi! The airbrush technique is amazing and looks so natural. Perfect
+                            for photoshoots and special events."</p>
+                        <div class="testimonial-author">
+                            <strong>Neha Kapoor</strong>
+                            <span>Photoshoot Client</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="cta-buttons" style="margin-top: 3rem; justify-content: center;">
+                    <a href="#" onclick="showSection('contact')" class="btn btn-primary">
+                        <span>Book Now</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+
+
+        <!-- Booking, Appointments & Contact Section (Merged) -->
+        <section class="page-section section-container" id="booking" data-page="booking">
+            <div class="container">
+                <h2 class="section-title">Booking & Contact</h2>
+
+                <p
+                    style="text-align: center; font-size: 1.1rem; color: #666; margin-bottom: 3rem; max-width: 700px; margin-left: auto; margin-right: auto;">
+                    Book your appointment or get in touch with us. Fill out the form below or use our contact
+                    information to reach us directly.
+                </p>
+
+                <!-- Booking Form -->
+                <div class="booking-form-container" style="margin-bottom: 4rem;">
+                    <h3
+                        style="text-align: center; color: var(--secondary-color); margin-bottom: 2rem; font-size: 1.8rem;">
+                        <i class="fas fa-calendar-check"></i> Book Your Appointment
+                    </h3>
+                    <form class="booking-form" id="bookingForm">
+                        <!-- Availability Status -->
+                        <div id="availabilityStatus" class="availability-status" style="display: none;">
+                            <i class="fas fa-info-circle"></i> <span>Checking availability...</span>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name"><i class="fas fa-user"></i> Full Name *</label>
+                                <input type="text" id="name" placeholder="Enter your name" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email"><i class="fas fa-envelope"></i> Email Address *</label>
+                                <input type="email" id="email" placeholder="your@email.com" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="phone"><i class="fas fa-phone"></i> Phone Number *</label>
+                                <input type="tel" id="phone" placeholder="+91 XXXXX XXXXX" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="service"><i class="fas fa-list"></i> Select Service *</label>
+                                <select id="service" required onchange="updatePaymentAmount()">
+                                    <option value="">Choose a service</option>
+                                    <option value="bridal" data-price="25000">Bridal Makeup - ₹25,000</option>
+                                    <option value="party" data-price="3000">Party Makeup - ₹3,000</option>
+                                    <option value="photoshoot" data-price="12000">Photoshoot - ₹12,000</option>
+                                    <option value="engagement" data-price="10000">Engagement - ₹10,000</option>
+                                    <option value="hd" data-price="10000">HD Makeup - ₹10,000</option>
+                                    <option value="airbrush" data-price="12000">Airbrush Makeup - ₹12,000</option>
+                                    <option value="custom">Custom Package</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="date"><i class="fas fa-calendar"></i> Preferred Date *</label>
+                                <input type="date" id="date" required onchange="checkDateAvailability()">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="time"><i class="fas fa-clock"></i> Preferred Time *</label>
+                                <input type="time" id="time" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message"><i class="fas fa-comment"></i> Additional Details</label>
+                            <textarea id="message" rows="4"
+                                placeholder="Any special requests or questions..."></textarea>
+                        </div>
+
+                        <!-- Payment Summary Step (Hidden by default) -->
+                        <div id="paymentSection" class="payment-summary" style="display: none;">
+                            <h4>Booking Summary</h4>
+                            <div class="summary-details">
+                                <p><strong>Service:</strong> <span id="summaryService">-</span></p>
+                                <p><strong>Amount Payable:</strong> <span id="summaryPrice">₹0</span></p>
+                            </div>
+                            <div class="payment-notice">
+                                <i class="fas fa-shield-alt"></i> 100% Secure Payment via Razorpay/Stripe
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-large" id="confirmBookingBtn">
+                            <span>Proceed to Payment</span>
+                            <i class="fas fa-credit-card"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Appointment Info Cards -->
+                <div class="booking-info-cards" style="margin-bottom: 4rem;">
+                    <div class="info-card">
+                        <i class="fas fa-clock"></i>
+                        <h4>Quick Response</h4>
+                        <p>We'll confirm within 24 hours</p>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-shield-alt"></i>
+                        <h4>Secure Booking</h4>
+                        <p>Your information is safe with us</p>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-calendar-check"></i>
+                        <h4>Flexible Scheduling</h4>
+                        <p>Choose your preferred time slot</p>
+                    </div>
+                </div>
+
+                <!-- Contact Information -->
+                <h3 style="text-align: center; color: var(--secondary-color); margin-bottom: 2rem; font-size: 1.8rem;">
+                    <i class="fas fa-phone-alt"></i> Contact Information
+                </h3>
+
+                <div class="contact-info">
+                    <div class="contact-card">
+                        <i class="fas fa-phone"></i>
+                        <h3>Phone</h3>
+                        <p>+91 70609 86289</p>
+                        <a href="tel:+917060986289" class="btn btn-secondary btn-small">
+                            <span>Call Now</span>
+                        </a>
+                    </div>
+
+                    <div class="contact-card">
+                        <i class="fas fa-envelope"></i>
+                        <h3>Email</h3>
+                        <p>info@glamourstudios.com</p>
+                        <a href="mailto:info@glamourstudios.com" class="btn btn-secondary btn-small">
+                            <span>Send Email</span>
+                        </a>
+                    </div>
+
+                    <div class="contact-card">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <h3>Studio</h3>
+                        <p>31-B, PP Nagar Rd, KK Nagar<br>Bain Bazar, Sikandra<br>Agra, Uttar Pradesh 282007</p>
+                        <a href="https://www.google.com/maps/dir/?api=1&destination=31-B,+PP+Nagar+Rd,+KK+Nagar,+Bain+Bazar,+Sikandra,+Agra,+Uttar+Pradesh+282007"
+                            target="_blank" class="btn btn-secondary btn-small">
+                            <span>Get Directions</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Social Media Links -->
+                <div class="social-links" style="margin-top: 3rem;">
+                    <a href="https://wa.me/7060986289" target="_blank" class="social-btn whatsapp">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a href="https://instagram.com" target="_blank" class="social-btn instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://facebook.com" target="_blank" class="social-btn facebook">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="simple-footer">
+        <div class="container">
+            <div class="footer-info">
+                <p class="footer-brand">
+                    Bhawna Sagar Makeover
+                </p>
+                <p class="footer-contact-info">
+                    <a href="tel:+917060986289"><i class="fas fa-phone"></i> +91 70609 86289</a>
+                    <span class="separator">|</span>
+                    <a href="mailto:info@glamourstudios.com"><i class="fas fa-envelope"></i> info@glamourstudios.com</a>
+                </p>
+                <div class="footer-social-links">
+                    <a href="https://wa.me/7060986289" target="_blank" aria-label="WhatsApp">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a href="https://instagram.com" target="_blank" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://facebook.com" target="_blank" aria-label="Facebook">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                </div>
+                <p class="footer-copyright">
+                    &copy; 2026 Bhawna Sagar Makeover. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- WhatsApp Float Button -->
+    <a href="https://wa.me/7060986289" class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Link to external JavaScript -->
+    <script type="module" src="../JS/MARKUP.JS"></script>
+</body>
+
+</html>
